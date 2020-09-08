@@ -5,16 +5,23 @@
 
         <form @submit.prevent="addSkill">
             <input type="text" placeholder="Enter a skill you have.." v-model="skill" v-validate="'min:5'" name="skill">
+      
+      <transition name="alert-in" enter-active-class="animated flipInX" leave-active-class="animated flipOutX">
+        <p class="alert" v-if="errors.has('skill')">{{ errors.first('skill') }}</p>
+      </transition>
+
 
             <p v-if="skill.length>=1"> You Typed: {{ skill }}</p>
         </form>
 
         <ul>
-            <li v-for="(data,index) in skills" :key='index'>{{index +1}}. {{data.skill}} </li>
+            <li v-for="(data,index) in skills" :key='index'>{{index +1}}. {{data.skill}}   </li>
         </ul>
     </div>
     <p v-if="skills.length>=5">You are Eligible to apply. Required 5 Skills </p>
     <p v-else>You have less than 5 skills. You didnt Fall into Our Criteria yet</p>
+
+    <div v-if="skills.length>=5"> <a href="#"> Proceed to Apply</a></div>
 
     <!-- <div v-bind:class="alertObject"></div>
     <div v-bind:style="alertStyle"></div> -->
@@ -30,10 +37,13 @@ export default {
             name: 'Courseto',
             skill: '',
             skills: [{
-                    "skill": "Vue Developer"
+                    "skill": "Vue Developer",
+                    "skillexp":"5"
                 },
                 {
-                    "skill": "Frontend Developer"
+                    "skill": "Frontend Developer",
+                    "skillexp":"10"
+
                 }
             ],
             alertObject: {
@@ -53,6 +63,7 @@ export default {
             this.skills.push({
                 skill: this.skill
             });
+            
             this.skill = '';
         }
     }
@@ -62,6 +73,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style scoped>
+@import "https://cdn.jsdelivr.net/npm/animate.css@3.5.1";
+
 h3 {
     margin: 40px 0 0;
 }
@@ -115,4 +128,22 @@ input {
     background-color: #323333;
     color: #687F7F;
 }
+.alert-in-enter-active {
+  animation: bounce-in .5s;
+}
+.alert-in-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 </style>
